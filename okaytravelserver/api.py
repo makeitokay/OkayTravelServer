@@ -4,6 +4,11 @@ from okaytravelserver.app import app
 from okaytravelserver.db import *
 
 
+@app.route("/create", methods=['POST'])
+def create_user():
+    pass
+
+
 @app.route("/")
 def index():
     user = User.query.filter_by(username='admin').first()
@@ -11,10 +16,9 @@ def index():
         return jsonify({"error": True, "message": "User not found"})
     return jsonify(
         {"error": False,
-        "user": {
-            "username": user.username,
-            "email": user.email
-            }
-        }
+         "user": {
+             "username": user.username,
+             "email": user.email
+         }
+         }
     )
-
