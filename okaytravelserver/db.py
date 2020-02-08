@@ -1,4 +1,4 @@
-import datetime as dt
+from uuid import uuid4
 
 from okaytravelserver.app import db
 
@@ -7,10 +7,18 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(100), nullable=False)
     avatar = db.Column(db.String(50), nullable=True)
+
+    access_token = db.Column(db.String(36), nullable=False, default=lambda: str(uuid4()))
 
     def __repr__(self):
         return f"<User {self.username}>"
+
+    @staticmethod
+    def create_user(username, email, password_hash, avatar=None):
+        db.session.add(User(username=username, email=email, password_hash=password_hash, avatar=avatar))
+        db.session.commit()
 
 
 class Trip(db.Model):
