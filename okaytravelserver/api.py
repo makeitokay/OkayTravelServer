@@ -17,7 +17,7 @@ def create_user():
 
     username = data["username"]
     email = data["email"]
-    password_hash = data["password_hash"]
+    password_hash = data["passwordHash"]
     avatar = data.get("avatar", None)
 
     try:
@@ -29,7 +29,7 @@ def create_user():
 
 @app.route("/sync", methods=["POST"])
 def sync():
-    access_token = request.args.get("access_token", None)
+    access_token = request.args.get("accessToken", None)
     data = request.json
 
     if not validate_sync_data(data):
@@ -40,7 +40,7 @@ def sync():
     if user.access_token != access_token:
         return error("Invalid access token")
 
-    last_update_datetime = data["last_update_datetime"]
+    last_update_datetime = data["lastUpdateDatetime"]
     if last_update_datetime is None:
         return serialize_user(user)
 
@@ -65,7 +65,7 @@ def auth():
         return error("User not found")
     user = user_by_name if user_by_name else user_by_email
 
-    if user.password_hash.lower() != data["password_hash"].lower():
+    if user.password_hash.lower() != data["passwordHash"].lower():
         return error("Wrong password")
 
     return ok(user.access_token)
