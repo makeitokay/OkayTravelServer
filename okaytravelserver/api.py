@@ -65,7 +65,7 @@ def auth():
         return error("User not found")
     user = user_by_name if user_by_name else user_by_email
 
-    if user.password_hash != data["password_hash"]:
+    if user.password_hash.lower() != data["password_hash"].lower():
         return error("Wrong password")
 
-    return ok("Authorized")
+    return ok(user.access_token)
