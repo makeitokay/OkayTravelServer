@@ -11,6 +11,9 @@ class User(db.Model):
     avatar = db.Column(db.String(50), nullable=True)
 
     access_token = db.Column(db.String(36), nullable=False, default=lambda: str(uuid4()))
+    last_update_datetime = db.Column(db.DateTime, nullable=True)
+
+    trips = db.relationship("Trip", backref="user", lazy=True)
 
     def __repr__(self):
         return f"<User {self.username}>"
