@@ -16,7 +16,12 @@ def create_user():
         return error("Bad request")
 
     username = data["username"]
+    if User.is_exist(username):
+        return error("Пользователь с таким именем уже существует")
     email = data["email"]
+    if User.is_exist_email(email):
+        return error("Пользователь с такой почтой уже существует")
+
     password_hash = data["passwordHash"]
     avatar = data.get("avatar", None)
 

@@ -25,6 +25,14 @@ class User(db.Model):
         db.session.commit()
         return user
 
+    @staticmethod
+    def is_exist(username):
+        return User.query.filter_by(username=username).first() is not None
+
+    @staticmethod
+    def is_exist_email(email):
+        return User.query.filter_by(email=email).first() is not None
+
 
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
