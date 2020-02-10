@@ -9,6 +9,10 @@ def ok(message="ok"):
     return jsonify({"error": False, "message": message})
 
 
+def auth_response(username, access_token):
+    return jsonify({"error": False, "username": username, "accessToken": access_token})
+
+
 def serialize_user(user):
     serialized = {
         "user": {

@@ -22,7 +22,7 @@ def create_user():
 
     try:
         user = User.create_user(username, email, password_hash, avatar)
-        return ok(user.access_token)
+        return auth_response(user.username, user.access_token)
     except Exception as e:
         return error(e)
 
@@ -62,10 +62,10 @@ def auth():
     user_by_name = User.query.filter_by(username=data["login"]).first()
     user_by_email = User.query.filter_by(email=data["login"]).first()
     if not (user_by_name or user_by_email):
-        return error("User not found")
+        return error("Такого пользователя не существует")
     user = user_by_name if user_by_name else user_by_email
 
     if user.password_hash.lower() != data["passwordHash"].lower():
-        return error("Wrong password")
+        return error("Неверный пароль")
 
-    return ok(user.access_token)
+    return auth_response(user.username, user.access_token)
