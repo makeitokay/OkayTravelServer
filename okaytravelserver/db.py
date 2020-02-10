@@ -20,8 +20,10 @@ class User(db.Model):
 
     @staticmethod
     def create_user(username, email, password_hash, avatar=None):
-        db.session.add(User(username=username, email=email, password_hash=password_hash, avatar=avatar))
+        user = User(username=username, email=email, password_hash=password_hash, avatar=avatar)
+        db.session.add(user)
         db.session.commit()
+        return user
 
 
 class Trip(db.Model):

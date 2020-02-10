@@ -21,8 +21,8 @@ def create_user():
     avatar = data.get("avatar", None)
 
     try:
-        User.create_user(username, email, password_hash, avatar)
-        return ok("User was successfully created")
+        user = User.create_user(username, email, password_hash, avatar)
+        return ok(user.access_token)
     except Exception as e:
         return error(e)
 
