@@ -34,22 +34,16 @@ def create_user():
 
 @app.route("/sync", methods=["POST"])
 def sync():
-    access_token = request.args.get("accessToken", None)
     data = request.json
 
-    if not validate_sync_data(data):
-        return error("Bad request")
-    user = User.query.filter_by(username=data["username"]).first()
+    user = User.query.filter_by(username=data["user"]["username"]).first()
     if user is None:
         return error("Undefined user")
-    if user.access_token != access_token:
+    if user.access_token != data["accessToken"]:
         return error("Invalid access token")
 
-    last_update_datetime = data["lastUpdateDatetime"]
-    if last_update_datetime is None:
-        return serialize_user(user)
-
-    from_timestamp = dt.datetime.fromtimestamp(int(last_update_datetime))
+    last_update_datetime = data["user"]["lastUpdateDatetime"]
+    from_timestamp = dt.datetime.strptime(last_update_datetime, DATETIME_FORMAT)
     if from_timestamp > user.last_update_datetime:
         # TODO: записать изменения в базу данных
         return ok()

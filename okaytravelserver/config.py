@@ -8,5 +8,5 @@ TRACK_MODIFICATIONS = True
 JSON_AS_ASCII = False
 
 # DateTime and Date formats
-DATETIME_FORMAT = "%d.%m.%YT%H:%M"
+DATETIME_FORMAT = "%d.%m.%YT%H:%M:%S"
 DATE_FORMAT = "%d.%m.%Y"
