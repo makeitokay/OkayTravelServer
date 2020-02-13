@@ -9,7 +9,7 @@ def ok(message="ok"):
     return jsonify({"error": False, "message": message})
 
 
-def auth_response(username, access_token):
+def sign_up_response(username, access_token):
     return jsonify({"error": False, "username": username, "accessToken": access_token})
 
 
@@ -50,4 +50,19 @@ def serialize_user(user):
             }
             trip_template["places"].append(place_template)
         serialized["trips"].append(trip_template)
+    return jsonify(serialized)
+
+
+def serialize_user_info(user):
+    serialized = {
+        "error": False,
+        "message": "",
+        "user": {
+            "username": user.username,
+            "email": user.email,
+            "passwordHash": user.password_hash,
+            "avatar": user.avatar,
+            "accessToken": user.access_token
+        }
+    }
     return jsonify(serialized)

@@ -27,7 +27,7 @@ def create_user():
 
     try:
         user = User.create_user(username, email, password_hash, avatar)
-        return auth_response(user.username, user.access_token)
+        return sign_up_response(user.username, user.access_token)
     except Exception as e:
         return error(e)
 
@@ -73,4 +73,4 @@ def auth():
     if user.password_hash.lower() != data["passwordHash"].lower():
         return error("Неверный пароль")
 
-    return auth_response(user.username, user.access_token)
+    return serialize_user_info(user)
