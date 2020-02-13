@@ -52,7 +52,7 @@ def sync():
     from_timestamp = dt.datetime.fromtimestamp(int(last_update_datetime))
     if from_timestamp > user.last_update_datetime:
         # TODO: записать изменения в базу данных
-        pass
+        return ok()
     else:
         return serialize_user(user)
 
