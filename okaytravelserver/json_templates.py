@@ -19,7 +19,8 @@ def serialize_user(user):
             "username": user.username,
             "email": user.email,
             "passwordHash": user.password_hash,
-            "avatar": user.avatar
+            "avatar": user.avatar,
+            "accessToken": user.access_token
         },
         "trips": []
     }
