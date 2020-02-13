@@ -7,10 +7,14 @@ from okaytravelserver.validate import *
 from okaytravelserver.json_templates import *
 from okaytravelserver.config import DATE_FORMAT, DATETIME_FORMAT
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/create", methods=['POST'])
 def create_user():
     data = request.json
+    logging.info(f"CREATE USER WITH REQUEST: {data}")
 
     if not validate_create_user_data(data):
         return error("Bad request")
@@ -35,6 +39,7 @@ def create_user():
 @app.route("/sync", methods=["POST"])
 def sync():
     data = request.json
+    logging.info(f"SYNC WITH REQUEST: {data}")
 
     user = User.query.filter_by(username=data["user"]["username"]).first()
     if user is None:
@@ -54,6 +59,7 @@ def sync():
 @app.route("/auth", methods=["POST"])
 def auth():
     data = request.json
+    logging.info(f"AUTH WITH REQUEST: {data}")
 
     if not validate_auth_data(data):
         return error("Bad request")
