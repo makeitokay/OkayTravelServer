@@ -36,6 +36,7 @@ class User(db.Model):
 
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    remote_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     own_place = db.Column(db.String(50), nullable=False)
     start_date = db.Column(db.Date, nullable=False)
@@ -47,6 +48,7 @@ class Trip(db.Model):
 
 class BudgetElement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    remote_id = db.Column(db.Integer, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     category = db.Column(db.String(30), nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
@@ -54,6 +56,7 @@ class BudgetElement(db.Model):
 
 class Place(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    remote_id = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
     date = db.Column(db.Date, nullable=False)
