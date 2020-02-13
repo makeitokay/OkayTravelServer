@@ -41,13 +41,13 @@ def sync():
     data = request.json
     logging.info(f"SYNC WITH REQUEST: {data}")
 
-    user = User.query.filter_by(username=data["user"]["username"]).first()
+    user = User.query.filter_by(username=data["user"]["user"]["username"]).first()
     if user is None:
         return error("Undefined user")
     if user.access_token != data["accessToken"]:
         return error("Invalid access token")
 
-    last_update_datetime = data["user"]["lastUpdateDatetime"]
+    last_update_datetime = data["user"]["user"]["lastUpdateDatetime"]
     from_timestamp = dt.datetime.strptime(last_update_datetime, DATETIME_FORMAT)
     if from_timestamp > user.last_update_datetime:
         # TODO: записать изменения в базу данных
