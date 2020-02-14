@@ -58,7 +58,7 @@ def sync():
     from_timestamp = dt.datetime.strptime(last_update_datetime, DATETIME_FORMAT)
     if from_timestamp > user.last_update_datetime:
         logging.info(f"UPDATE SERVER DATABASE, USER {user.username}")
-        # TODO: записать изменения в базу данных
+        user.update_with_request(data)
         return ok()
     else:
         logging.info(f"UPDATE LOCAL DATABASE, USER {user.username}")
