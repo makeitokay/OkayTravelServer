@@ -30,10 +30,10 @@ class User(db.Model):
         self.last_update_datetime = get_current_datetime()
 
         for trip_info in trips:
-            trip_remote_id = int(trip_info["remoteId"])
-            own_place = trip_info["ownPlace"]
-            start_date = parse_date_string(trip_info["startDate"])
-            duration = int(trip_info["duration"])
+            trip_remote_id = int(trip_info["trip"]["remoteId"])
+            own_place = trip_info["trip"]["ownPlace"]
+            start_date = parse_date_string(trip_info["trip"]["startDate"])
+            duration = int(trip_info["trip"]["duration"])
             trip = Trip.query.filter_by(remote_id=trip_remote_id, user_id=self.id).first()
             if trip is None:
                 trip = Trip.create_trip(trip_remote_id, self.id, own_place, start_date, duration)
