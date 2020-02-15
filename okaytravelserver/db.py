@@ -11,7 +11,7 @@ class User(db.Model):
     avatar = db.Column(db.String(50), nullable=True)
 
     access_token = db.Column(db.String(36), nullable=False, default=lambda: str(uuid4()))
-    last_update_datetime = db.Column(db.DateTime, nullable=True, default=get_current_datetime())
+    last_update_datetime = db.Column(db.DateTime, nullable=True, default=lambda: get_current_datetime())
 
     trips = db.relationship("Trip", backref="user", lazy=True)
 
