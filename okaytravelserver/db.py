@@ -26,7 +26,7 @@ class User(db.Model):
         self.username = user_info["username"]
         self.email = user_info["email"]
         self.password_hash = user_info["passwordHash"]
-        self.avatar = user_info["avatar"]
+        self.avatar = user_info.get("avatar", None)
         self.last_update_datetime = get_current_datetime()
 
         for trip_info in trips:
