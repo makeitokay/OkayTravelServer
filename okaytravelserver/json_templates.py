@@ -18,13 +18,16 @@ def sign_up_response(username, access_token):
 def serialize_user(user):
     serialized = {
         "user": {
-            "username": user.username,
-            "email": user.email,
-            "passwordHash": user.password_hash,
-            "avatar": user.avatar,
-            "accessToken": user.access_token
-        },
-        "trips": []
+            "user": {
+                "username": user.username,
+                "email": user.email,
+                "passwordHash": user.password_hash,
+                "avatar": user.avatar,
+                "accessToken": user.access_token
+            },
+            "trips": []
+        }
+
     }
     for trip in user.trips:
         trip_template = {
