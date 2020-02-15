@@ -11,6 +11,14 @@ def get_current_date():
     return dt.datetime.today()
 
 
+def parse_date(date):
+    return dt.date.strftime(date, DATE_FORMAT)
+
+
+def parse_datetime(date):
+    return dt.datetime.strftime(date, DATETIME_FORMAT)
+
+
 def parse_date_string(date):
     return dt.datetime.strptime(date, DATE_FORMAT)
 

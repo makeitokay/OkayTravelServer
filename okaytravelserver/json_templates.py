@@ -1,5 +1,7 @@
 from flask import jsonify
 
+from okaytravelserver.utils import parse_date
+
 
 def error(message="unknown error"):
     return jsonify({"error": True, "message": message})
@@ -29,7 +31,7 @@ def serialize_user(user):
             "trip": {
                 "remoteId": trip.remote_id,
                 "ownPlace": trip.own_place,
-                "startDate": trip.start_date.timestamp() * 1000,
+                "startDate": parse_date(trip.start_date),
                 "duration": trip.duration
             },
             "budget": [],
@@ -46,7 +48,7 @@ def serialize_user(user):
             place_template = {
                 "remoteId": place.remote_id,
                 "name": place.name,
-                "date": place.date.timestamp() * 1000
+                "date": parse_date(place.date)
             }
             trip_template["places"].append(place_template)
         serialized["trips"].append(trip_template)
