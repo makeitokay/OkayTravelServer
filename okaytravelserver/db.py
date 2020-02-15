@@ -11,7 +11,7 @@ class User(db.Model):
     avatar = db.Column(db.String(50), nullable=True)
 
     access_token = db.Column(db.String(36), nullable=False, default=lambda: str(uuid4()))
-    last_update_datetime = db.Column(db.DateTime, nullable=True, default=lambda: get_current_datetime())
+    commits = db.Column(db.Integer, nullable=False, default=0)
 
     trips = db.relationship("Trip", backref="user", lazy=True)
 
@@ -27,7 +27,7 @@ class User(db.Model):
         self.email = user_info["email"]
         self.password_hash = user_info["passwordHash"]
         self.avatar = user_info.get("avatar", None)
-        self.last_update_datetime = get_current_datetime()
+        self.commits = user_info["commits"]
 
         for trip_info in trips:
             trip_remote_id = int(trip_info["trip"]["remoteId"])
