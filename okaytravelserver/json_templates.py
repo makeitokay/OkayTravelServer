@@ -27,7 +27,6 @@ def serialize_user(user):
             },
             "trips": []
         }
-
     }
     for trip in user.trips:
         trip_template = {
@@ -54,7 +53,7 @@ def serialize_user(user):
                 "date": parse_date(place.date)
             }
             trip_template["places"].append(place_template)
-        serialized["trips"].append(trip_template)
+        serialized["user"]["trips"].append(trip_template)
     return jsonify(serialized)
 
 
