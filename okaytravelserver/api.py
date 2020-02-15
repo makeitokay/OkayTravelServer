@@ -54,15 +54,15 @@ def sync():
         logging.info(f"RETURN INVALID ACCESS TOKEN ERROR, USER {user.username}")
         return error("Invalid access token")
 
-    last_update_datetime = data["user"]["user"]["lastUpdateDatetime"]
-    from_timestamp = dt.datetime.strptime(last_update_datetime, DATETIME_FORMAT)
-    if from_timestamp > user.last_update_datetime:
-        logging.info(f"UPDATE SERVER DATABASE, USER {user.username}")
-        user.update_with_request(data)
-        return ok()
-    else:
-        logging.info(f"UPDATE LOCAL DATABASE, USER {user.username}")
-        return serialize_user(user)
+    last_update_datetime = data["user"]["user"].get("lastUpdateDatetime", None)
+    if last_update_datetime is not None:
+        from_timestamp = dt.datetime.strptime(last_update_datetime, DATETIME_FORMAT)
+        if from_timestamp > user.last_update_datetime:
+            logging.info(f"UPDATE SERVER DATABASE, USER {user.username}")
+            user.update_with_request(data)
+            return ok()
+    logging.info(f"UPDATE LOCAL DATABASE, USER {user.username}")
+    return serialize_user(user)
 
 
 @app.route("/auth", methods=["POST"])
