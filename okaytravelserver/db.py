@@ -30,7 +30,7 @@ class User(db.Model):
         self.commits = user_info["commits"]
 
         for trip_info in trips:
-            trip_uuid = int(trip_info["trip"]["uuid"])
+            trip_uuid = trip_info["trip"]["uuid"]
             own_place = trip_info["trip"]["ownPlace"]
             start_date = parse_date_string(trip_info["trip"]["startDate"])
             duration = int(trip_info["trip"]["duration"])
@@ -43,7 +43,7 @@ class User(db.Model):
                 trip.duration = duration
 
             for budget_element_info in trip_info["budget"]:
-                budget_uuid = int(budget_element_info["uuid"])
+                budget_uuid = budget_element_info["uuid"]
                 amount = int(budget_element_info["amount"])
                 category = budget_element_info["category"]
 
@@ -55,7 +55,7 @@ class User(db.Model):
                     budget_element.category = category
 
             for place_info in trip_info["places"]:
-                place_uuid = int(place_info["uuid"])
+                place_uuid = place_info["uuid"]
                 name = place_info["name"]
                 date = parse_date_string(place_info["date"])
 
