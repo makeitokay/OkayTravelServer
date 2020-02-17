@@ -98,8 +98,8 @@ class Trip(db.Model):
     places = db.relationship("Place", backref="trip", lazy=True)
 
     @staticmethod
-    def create_trip(remote_id, user_id, own_place, start_date, duration):
-        trip = Trip(remote_id=remote_id, user_id=user_id, own_place=own_place, start_date=start_date, duration=duration)
+    def create_trip(uuid, user_id, own_place, start_date, duration):
+        trip = Trip(uuid=uuid, user_id=user_id, own_place=own_place, start_date=start_date, duration=duration)
         db.session.add(trip)
         db.session.commit()
         return trip
@@ -113,8 +113,8 @@ class BudgetElement(db.Model):
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
 
     @staticmethod
-    def create_budget_element(remote_id, trip_id, amount, category):
-        budget_element = BudgetElement(remote_id=remote_id, trip_id=trip_id, amount=amount, category=category)
+    def create_budget_element(uuid, trip_id, amount, category):
+        budget_element = BudgetElement(uuid=uuid, trip_id=trip_id, amount=amount, category=category)
         db.session.add(budget_element)
         db.session.commit()
         return budget_element
@@ -128,8 +128,8 @@ class Place(db.Model):
     date = db.Column(db.Date, nullable=False)
 
     @staticmethod
-    def create_place(remote_id, trip_id, name, date):
-        place = Place(remote_id=remote_id, trip_id=trip_id, name=name, date=date)
+    def create_place(uuid, trip_id, name, date):
+        place = Place(uuid=uuid, trip_id=trip_id, name=name, date=date)
         db.session.add(place)
         db.session.commit()
         return place
