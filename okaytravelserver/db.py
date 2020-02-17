@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from okaytravelserver.app import db
-from okaytravelserver.utils import get_current_datetime, parse_date_string
+from okaytravelserver.utils import parse_date_string
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,38 +30,38 @@ class User(db.Model):
         self.commits = user_info["commits"]
 
         for trip_info in trips:
-            trip_remote_id = int(trip_info["trip"]["remoteId"])
+            trip_uuid = int(trip_info["trip"]["uuid"])
             own_place = trip_info["trip"]["ownPlace"]
             start_date = parse_date_string(trip_info["trip"]["startDate"])
             duration = int(trip_info["trip"]["duration"])
-            trip = Trip.query.filter_by(remote_id=trip_remote_id, user_id=self.id).first()
+            trip = Trip.query.filter_by(uuid=trip_uuid).first()
             if trip is None:
-                trip = Trip.create_trip(trip_remote_id, self.id, own_place, start_date, duration)
+                trip = Trip.create_trip(trip_uuid, self.id, own_place, start_date, duration)
             else:
                 trip.own_place = own_place
                 trip.start_date = start_date
                 trip.duration = duration
 
             for budget_element_info in trip_info["budget"]:
-                budget_remote_id = int(budget_element_info["remoteId"])
+                budget_uuid = int(budget_element_info["uuid"])
                 amount = int(budget_element_info["amount"])
                 category = budget_element_info["category"]
 
-                budget_element = BudgetElement.query.filter_by(remote_id=budget_remote_id, trip_id=trip.id).first()
+                budget_element = BudgetElement.query.filter_by(uuid=budget_uuid).first()
                 if budget_element is None:
-                    BudgetElement.create_budget_element(budget_remote_id, trip.id, amount, category)
+                    BudgetElement.create_budget_element(budget_uuid, trip.id, amount, category)
                 else:
                     budget_element.amount = amount
                     budget_element.category = category
 
             for place_info in trip_info["places"]:
-                place_remote_id = int(place_info["remoteId"])
+                place_uuid = int(place_info["uuid"])
                 name = place_info["name"]
                 date = parse_date_string(place_info["date"])
 
-                place = Place.query.filter_by(remote_id=place_remote_id, trip_id=trip.id).first()
+                place = Place.query.filter_by(uuid=place_uuid).first()
                 if place is None:
-                    Place.create_place(place_remote_id, trip.id, name, date)
+                    Place.create_place(place_uuid, trip.id, name, date)
                 else:
                     place.name = name
                     place.date = date
@@ -88,7 +88,7 @@ class User(db.Model):
 
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    remote_id = db.Column(db.Integer, nullable=False)
+    uuid = db.Column(db.String(36), nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     own_place = db.Column(db.String(50), nullable=False)
     start_date = db.Column(db.Date, nullable=False)
@@ -107,7 +107,7 @@ class Trip(db.Model):
 
 class BudgetElement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    remote_id = db.Column(db.Integer, nullable=False)
+    uuid = db.Column(db.String(36), nullable=False, unique=True)
     amount = db.Column(db.Integer, nullable=False)
     category = db.Column(db.String(30), nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
@@ -122,7 +122,7 @@ class BudgetElement(db.Model):
 
 class Place(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    remote_id = db.Column(db.Integer, nullable=False)
+    uuid = db.Column(db.String(36), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
     date = db.Column(db.Date, nullable=False)

@@ -32,7 +32,7 @@ def serialize_user(user):
     for trip in user.trips:
         trip_template = {
             "trip": {
-                "remoteId": trip.remote_id,
+                "uuid": trip.uuid,
                 "ownPlace": trip.own_place,
                 "startDate": parse_date(trip.start_date),
                 "duration": trip.duration
@@ -42,14 +42,14 @@ def serialize_user(user):
         }
         for budget_el in trip.budget:
             budget_template = {
-                "remoteId": budget_el.remote_id,
+                "uuid": budget_el.uuid,
                 "amount": budget_el.amount,
                 "category": budget_el.category
             }
             trip_template["budget"].append(budget_template)
         for place in trip.places:
             place_template = {
-                "remoteId": place.remote_id,
+                "uuid": place.uuid,
                 "name": place.name,
                 "date": parse_date(place.date)
             }
