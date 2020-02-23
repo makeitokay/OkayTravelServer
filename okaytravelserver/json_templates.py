@@ -34,6 +34,7 @@ def serialize_user(user):
             "trip": {
                 "uuid": trip.uuid,
                 "ownPlace": trip.own_place,
+                "fullAddress": trip.full_address,
                 "startDate": parse_date(trip.start_date),
                 "duration": trip.duration
             },

@@ -3,6 +3,7 @@ from uuid import uuid4
 from okaytravelserver.app import db
 from okaytravelserver.utils import parse_date_string
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -32,13 +33,15 @@ class User(db.Model):
         for trip_info in trips:
             trip_uuid = trip_info["trip"]["uuid"]
             own_place = trip_info["trip"]["ownPlace"]
+            full_address = trip_info["trip"]["fullAddress"]
             start_date = parse_date_string(trip_info["trip"]["startDate"])
             duration = int(trip_info["trip"]["duration"])
             trip = Trip.query.filter_by(uuid=trip_uuid).first()
             if trip is None:
-                trip = Trip.create_trip(trip_uuid, self.id, own_place, start_date, duration)
+                trip = Trip.create_trip(trip_uuid, self.id, own_place, full_address, start_date, duration)
             else:
                 trip.own_place = own_place
+                trip.full_address = full_address
                 trip.start_date = start_date
                 trip.duration = duration
 
@@ -68,8 +71,6 @@ class User(db.Model):
 
         db.session.commit()
 
-
-
     @staticmethod
     def create_user(username, email, password_hash, avatar=None):
         user = User(username=username, email=email, password_hash=password_hash, avatar=avatar)
@@ -91,6 +92,7 @@ class Trip(db.Model):
     uuid = db.Column(db.String(36), nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     own_place = db.Column(db.String(50), nullable=False)
+    full_address = db.Column(db.String(150), nullable=False)
     start_date = db.Column(db.Date, nullable=False)
     duration = db.Column(db.Integer, nullable=True)
 
@@ -98,8 +100,9 @@ class Trip(db.Model):
     places = db.relationship("Place", backref="trip", lazy=True)
 
     @staticmethod
-    def create_trip(uuid, user_id, own_place, start_date, duration):
-        trip = Trip(uuid=uuid, user_id=user_id, own_place=own_place, start_date=start_date, duration=duration)
+    def create_trip(uuid, user_id, own_place, full_address, start_date, duration):
+        trip = Trip(uuid=uuid, user_id=user_id, own_place=own_place, full_address=full_address, start_date=start_date,
+                    duration=duration)
         db.session.add(trip)
         db.session.commit()
         return trip
