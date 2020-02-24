@@ -60,13 +60,15 @@ class User(db.Model):
             for place_info in trip_info["places"]:
                 place_uuid = place_info["uuid"]
                 name = place_info["name"]
+                full_address = place_info["fullAddress"]
                 date = parse_date_string(place_info["date"])
 
                 place = Place.query.filter_by(uuid=place_uuid).first()
                 if place is None:
-                    Place.create_place(place_uuid, trip.id, name, date)
+                    Place.create_place(place_uuid, trip.id, name, full_address, date)
                 else:
                     place.name = name
+                    place.full_address = full_address
                     place.date = date
 
         db.session.commit()
@@ -127,12 +129,13 @@ class Place(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.String(36), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
+    full_address = db.Column(db.String(150), nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
     date = db.Column(db.Date, nullable=False)
 
     @staticmethod
-    def create_place(uuid, trip_id, name, date):
-        place = Place(uuid=uuid, trip_id=trip_id, name=name, date=date)
+    def create_place(uuid, trip_id, name, full_address, date):
+        place = Place(uuid=uuid, trip_id=trip_id, name=name, full_address=full_address, date=date)
         db.session.add(place)
         db.session.commit()
         return place
