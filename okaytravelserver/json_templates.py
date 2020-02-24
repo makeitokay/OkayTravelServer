@@ -53,6 +53,8 @@ def serialize_user(user):
                 "uuid": place.uuid,
                 "name": place.name,
                 "fullAddress": place.full_address,
+                "latitude": place.latitude,
+                "longitude": place.longitude,
                 "date": parse_date(place.date)
             }
             trip_template["places"].append(place_template)
