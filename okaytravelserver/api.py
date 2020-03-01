@@ -1,15 +1,14 @@
 from flask import request
-import datetime as dt
 
 from okaytravelserver.app import app
 from okaytravelserver.db import *
 from okaytravelserver.validate import *
 from okaytravelserver.json_templates import *
-from okaytravelserver.config import DATE_FORMAT, DATETIME_FORMAT
 
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
+
 
 @app.route("/create", methods=['POST'])
 def create_user():
@@ -44,16 +43,16 @@ def create_user():
 @app.route("/sync", methods=["POST"])
 def sync():
     data = request.json
-    logging.info(f"SYNC WITH REQUEST: {data}")
 
     user = User.query.filter_by(username=data["user"]["user"]["username"]).first()
     if user is None:
-        logging.info(f"RETURN UNDEFINED USER ERROR")
+        logging.info(f"SYNC WITH REQUEST: {data}\nRETURN UNDEFINED USER ERROR")
         return error("Undefined user")
     if user.access_token != data["accessToken"]:
-        logging.info(f"RETURN INVALID ACCESS TOKEN ERROR, USER {user.username}")
+        logging.info(f"SYNC WITH REQUEST: {data}\nRETURN INVALID ACCESS TOKEN ERROR, USER {user.username}")
         return error("Invalid access token")
 
+    logging.info(f"SYNC FROM USER: {user.username} COMMITS: {user.commits}")
     commits = int(data["user"]["user"]["commits"])
     if commits > user.commits:
         logging.info(f"UPDATE SERVER DATABASE, USER {user.username}")
