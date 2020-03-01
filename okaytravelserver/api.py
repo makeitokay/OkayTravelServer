@@ -52,8 +52,8 @@ def sync():
         logging.info(f"SYNC WITH REQUEST: {data}\nRETURN INVALID ACCESS TOKEN ERROR, USER {user.username}")
         return error("Invalid access token")
 
-    logging.info(f"SYNC FROM USER: {user.username} COMMITS: {user.commits}")
     commits = int(data["user"]["user"]["commits"])
+    logging.info(f"SYNC FROM USER: {user.username} COMMITS: {commits}")
     if commits > user.commits:
         logging.info(f"UPDATE SERVER DATABASE, USER {user.username}")
         user.update_with_request(data)
