@@ -59,8 +59,8 @@ class User(db.Model):
 
             for place_info in trip_info["places"]:
                 place_uuid = place_info["uuid"]
-                name = place_info["name"]
-                full_address = place_info["fullAddress"]
+                name = place_info.get("name", None)
+                full_address = place_info.get("fullAddress", None)
                 latitude = place_info["latitude"]
                 longitude = place_info["longitude"]
                 date = parse_date_string(place_info["date"])
@@ -132,8 +132,8 @@ class BudgetElement(db.Model):
 class Place(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.String(36), nullable=False, unique=True)
-    name = db.Column(db.String(100), nullable=False)
-    full_address = db.Column(db.String(150), nullable=False)
+    name = db.Column(db.String(100), nullable=True)
+    full_address = db.Column(db.String(150), nullable=True)
     latitude = db.Column(db.String(10), nullable=False)
     longitude = db.Column(db.String(10), nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
