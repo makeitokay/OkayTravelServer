@@ -78,12 +78,14 @@ class User(db.Model):
             for thing_info in trip_info["things"]:
                 thing_uuid = thing_info["uuid"]
                 thing_name = thing_info["name"]
+                thing_taken = thing_info["taken"]
 
                 thing = Thing.query.filter_by(uuid=thing_uuid).first()
                 if thing is None:
-                    Thing.create_thing(thing_uuid, trip.id, thing_name)
+                    Thing.create_thing(thing_uuid, trip.id, thing_taken, thing_name)
                 else:
                     thing.name = thing_name
+                    thing.taken = thing_taken
 
         db.session.commit()
 
@@ -162,11 +164,12 @@ class Thing(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.String(36), nullable=False, unique=True)
     name = db.Column(db.String(50), nullable=False)
+    taken = db.Column(db.Boolean, nullable=False)
     trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
 
     @staticmethod
-    def create_thing(uuid, trip_id, name):
-        thing = Thing(uuid=uuid, trip_id=trip_id, name=name)
+    def create_thing(uuid, trip_id, taken, name):
+        thing = Thing(uuid=uuid, trip_id=trip_id, name=name, taken=taken)
         db.session.add(thing)
         db.session.commit()
         return thing

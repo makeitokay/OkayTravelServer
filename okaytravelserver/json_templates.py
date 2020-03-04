@@ -62,7 +62,8 @@ def serialize_user(user):
         for thing in trip.things:
             thing_template = {
                 "uuid": thing.uuid,
-                "name": thing.name
+                "name": thing.name,
+                "taken": thing.taken
             }
             trip_template["things"].append(thing_template)
         serialized["user"]["trips"].append(trip_template)
