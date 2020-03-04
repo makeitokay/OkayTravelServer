@@ -39,7 +39,8 @@ def serialize_user(user):
                 "duration": trip.duration
             },
             "budget": [],
-            "places": []
+            "places": [],
+            "things": []
         }
         for budget_el in trip.budget:
             budget_template = {
@@ -58,6 +59,12 @@ def serialize_user(user):
                 "date": parse_date(place.date)
             }
             trip_template["places"].append(place_template)
+        for thing in trip.things:
+            thing_template = {
+                "uuid": thing.uuid,
+                "name": thing.name
+            }
+            trip_template["things"].append(thing_template)
         serialized["user"]["trips"].append(trip_template)
     return jsonify(serialized)
 

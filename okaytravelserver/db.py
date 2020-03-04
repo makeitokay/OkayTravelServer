@@ -75,6 +75,16 @@ class User(db.Model):
                     place.longitude = longitude
                     place.date = date
 
+            for thing_info in trip_info["things"]:
+                thing_uuid = thing_info["uuid"]
+                thing_name = thing_info["name"]
+
+                thing = Thing.query.filter_by(uuid=thing_uuid).first()
+                if thing is None:
+                    Thing.create_thing(thing_uuid, trip.id, thing_name)
+                else:
+                    thing.name = thing_name
+
         db.session.commit()
 
     @staticmethod
@@ -141,10 +151,25 @@ class Place(db.Model):
 
     @staticmethod
     def create_place(uuid, trip_id, name, full_address, latitude, longitude, date):
-        place = Place(uuid=uuid, trip_id=trip_id, name=name, full_address=full_address, latitude=latitude, longitude=longitude, date=date)
+        place = Place(uuid=uuid, trip_id=trip_id, name=name, full_address=full_address, latitude=latitude,
+                      longitude=longitude, date=date)
         db.session.add(place)
         db.session.commit()
         return place
+
+
+class Thing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String(36), nullable=False, unique=True)
+    name = db.Column(db.String(50), nullable=False)
+    trip_id = db.Column(db.Integer, db.ForeignKey("trip.id"), nullable=False)
+
+    @staticmethod
+    def create_thing(uuid, trip_id, name):
+        thing = Thing(uuid=uuid, trip_id=trip_id, name=name)
+        db.session.add(thing)
+        db.session.commit()
+        return thing
 
 
 db.create_all()
