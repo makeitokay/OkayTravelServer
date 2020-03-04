@@ -116,6 +116,7 @@ class Trip(db.Model):
 
     budget = db.relationship("BudgetElement", backref="trip", lazy=True)
     places = db.relationship("Place", backref="trip", lazy=True)
+    things = db.relationship("Thing", backref="trip", lazy=True)
 
     @staticmethod
     def create_trip(uuid, user_id, own_place, full_address, start_date, duration):
