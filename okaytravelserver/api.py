@@ -1,6 +1,7 @@
-from flask import request
+from flask import request, send_file
 
 from okaytravelserver.app import app
+from okaytravelserver.city_images import get_city_id
 from okaytravelserver.db import *
 from okaytravelserver.validate import *
 from okaytravelserver.json_templates import *
@@ -84,3 +85,17 @@ def auth():
 
     logging.info(f"RETURN SERIALIZE USER {user.username}")
     return serialize_user_info(user)
+
+
+@app.route("/image", methods=["GET"])
+def get_image():
+    city = request.args.get("city")
+    print()
+    if city is None:
+        return error("Bad request")
+
+    city_id = get_city_id(city)
+    if city_id is None:
+        return error("City not found")
+
+    return send_file(f"assets/cities/{city_id}.jpg", mimetype="image/jpeg")
