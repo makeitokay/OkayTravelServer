@@ -59,9 +59,10 @@ def sync():
         logging.info(f"UPDATE SERVER DATABASE, USER {user.username}")
         user.update_with_request(data)
         return ok()
-    logging.info(f"UPDATE LOCAL DATABASE, USER {user.username}")
-    return serialize_user(user)
-
+    elif commits < user.commits:
+        logging.info(f"UPDATE LOCAL DATABASE, USER {user.username}")
+        return serialize_user(user)
+    return ok("All data is up-to-date")
 
 @app.route("/auth", methods=["POST"])
 def auth():
