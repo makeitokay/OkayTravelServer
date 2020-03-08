@@ -13,6 +13,7 @@ class User(db.Model):
 
     access_token = db.Column(db.String(36), nullable=False, default=lambda: str(uuid4()))
     commits = db.Column(db.Integer, nullable=False, default=0)
+    premium = db.Column(db.Boolean, nullable=False, default=False)
 
     trips = db.relationship("Trip", backref="user", lazy=True)
 
@@ -29,6 +30,7 @@ class User(db.Model):
         self.password_hash = user_info["passwordHash"]
         self.avatar = user_info.get("avatar", None)
         self.commits = user_info["commits"]
+        self.premium = user_info["premium"]
 
         for trip_info in trips:
             trip_uuid = trip_info["trip"]["uuid"]
@@ -90,8 +92,8 @@ class User(db.Model):
         db.session.commit()
 
     @staticmethod
-    def create_user(username, email, password_hash, avatar=None):
-        user = User(username=username, email=email, password_hash=password_hash, avatar=avatar)
+    def create_user(username, email, password_hash, avatar=None, premium=False):
+        user = User(username=username, email=email, password_hash=password_hash, avatar=avatar, premium=premium)
         db.session.add(user)
         db.session.commit()
         return user

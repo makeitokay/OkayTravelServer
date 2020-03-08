@@ -24,7 +24,8 @@ def serialize_user(user):
                 "passwordHash": user.password_hash,
                 "avatar": user.avatar,
                 "accessToken": user.access_token,
-                "commits": user.commits
+                "commits": user.commits,
+                "premium": user.premium
             },
             "trips": []
         }
@@ -79,7 +80,8 @@ def serialize_user_info(user):
             "email": user.email,
             "passwordHash": user.password_hash,
             "avatar": user.avatar,
-            "accessToken": user.access_token
+            "accessToken": user.access_token,
+            "premium": user.premium
         }
     }
     return jsonify(serialized)
