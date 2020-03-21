@@ -11,7 +11,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 
-@app.route("/create", methods=['POST'])
+@app.route("/create", methods=["POST"])
 def create_user():
     data = request.json
     logging.info(f"CREATE USER WITH REQUEST: {data}")
@@ -50,7 +50,9 @@ def sync():
         logging.info(f"SYNC WITH REQUEST: {data}\nRETURN UNDEFINED USER ERROR")
         return error("Undefined user")
     if user.access_token != data["accessToken"]:
-        logging.info(f"SYNC WITH REQUEST: {data}\nRETURN INVALID ACCESS TOKEN ERROR, USER {user.username}")
+        logging.info(
+            f"SYNC WITH REQUEST: {data}\nRETURN INVALID ACCESS TOKEN ERROR, USER {user.username}"
+        )
         return error("Invalid access token")
 
     commits = int(data["user"]["user"]["commits"])
@@ -63,6 +65,7 @@ def sync():
         logging.info(f"UPDATE LOCAL DATABASE, USER {user.username}")
         return serialize_user(user)
     return ok("All data is up-to-date")
+
 
 @app.route("/auth", methods=["POST"])
 def auth():
@@ -104,4 +107,9 @@ def get_image():
 
 @app.route("/download")
 def download_app():
-    return send_file("assets/OkayTravel.apk", mimetype="application/vnd.android.package-archive")
+    return send_file(
+        "assets/OkayTravel.apk",
+        mimetype="application/vnd.android.package-archive",
+        as_attachment=True,
+        attachment_filename="OkayTravel.apk",
+    )
