@@ -100,3 +100,8 @@ def get_image():
         return error("City not found")
 
     return send_file(f"assets/cities/{city_id}.jpg", mimetype="image/jpeg")
+
+
+@app.route("/download")
+def download_app():
+    return send_file("assets/OkayTravel.apk", mimetype="application/vnd.android.package-archive")
